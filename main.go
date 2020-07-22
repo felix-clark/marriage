@@ -20,6 +20,8 @@ const (
 	unavailable        = "unavailable"
 	slackChannelIDEnv  = "SLACK_CHANNEL_ID"
 	slackOauthTokenEnv = "SLACK_OAUTH_TOKEN"
+	quietEnv           = "QUIET"
+	unavailMsg         = "Nothing available"
 )
 
 func main() {
@@ -37,9 +39,14 @@ func handleRequest() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	sc := slack.NewClient(SlackOauthToken)
-	if err := sc.Post(SlackChannelID, message); err != nil {
-		return "", errors.New("failed to post to slack")
+	quiet := os.Getenv(quietEnv)
+	if quiet == "" || message != unavailMsg {
+		sc := slack.NewClient(SlackOauthToken)
+		if err := sc.Post(SlackChannelID, message); err != nil {
+			return "", errors.New("failed to post to slack")
+		}
+	} else {
+		fmt.Printf("Message \"%s\" silenced.", message)
 	}
 	return "", nil
 }
@@ -96,7 +103,7 @@ func getMessage() (string, error) {
 		}
 	}
 	if message == "" {
-		return "Nothing available", nil
+		return unavailMsg, nil
 	}
 	return message, nil
 }
