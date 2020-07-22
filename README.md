@@ -1,5 +1,9 @@
 # marriage
 
+This is a fork of [chuckha](https://github.com/chuckha)'s
+[bot](https://github.com/chuckha/marriage) to routinely check availability for NYC
+marriage license appointments. I have only made a few small convenience tweaks.
+
 This is designed to be run with [AWS Lambda](https://aws.amazon.com/lambda/).
 
 To get started, build the bundle with `make`. The default target builds a zip bundle that will work with lambda.
@@ -52,6 +56,7 @@ You will need a slack oauth token and a slack channel to post to.
     
         1. set `SLACK_CHANNEL_ID` to the channel ID of the slack channel you want this function to post to
         0. set `SLACK_OAUTH_TOKEN` to the oauth token provided by slack
+        0. (Optional) set `QUIET` to `1` to suppress messages when there is no availability
         
     0. Save your configuration
     0. At the top, next to `Test`, click the dropdown labled `Select a test event`
